@@ -21,6 +21,6 @@ public class ProductServices {
 
     public Integer calculateCart(){
         List<Products> list = productRepository.getAll();
-        list.stream().reduce(0,(a,b)->a);
+        return 0;
     }
 }
