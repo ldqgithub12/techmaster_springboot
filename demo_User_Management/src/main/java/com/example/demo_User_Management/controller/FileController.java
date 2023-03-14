@@ -25,7 +25,7 @@ public class FileController {
         FileResponse fileResponse = fileService.uploadFile(file);
         return ResponseEntity.ok(fileResponse);
     }
-    @GetMapping("/files")
+    @GetMapping("/files/{id}")
     public ResponseEntity<?> readFile(@PathVariable String id){
         byte[] bytes = fileService.readFile(id);
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
