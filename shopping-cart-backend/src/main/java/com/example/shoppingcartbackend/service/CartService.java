@@ -18,9 +18,9 @@ public class CartService {
     public List<CartItemDto> getAll(){
         List<CartItemDto> cartItemDtos = list.stream().map(cartItem -> {
             CartItemDto cartItemDto =  new CartItemDto();
-           cartItemDto.setId(cartItem.getId());
-           cartItemDto.setCourse(courseList.get(cartItem.getCourseId()));
-           cartItemDto.setCount(cartItem.getCount());
+            cartItemDto.setId(cartItem.getId());
+            cartItemDto.setCourse(courseList.get(cartItem.getCourseId()));
+            cartItemDto.setCount(cartItem.getCount());
             return cartItemDto;
         }).collect(Collectors.toList());
         return cartItemDtos;
