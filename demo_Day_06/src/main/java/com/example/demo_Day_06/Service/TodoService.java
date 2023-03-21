@@ -14,18 +14,8 @@ import java.util.Objects;
 @Service
 public class TodoService {
     private final TodoRepository todoRepository;
-    private List<Todo> todoList;
-
     public TodoService(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
-//        todoList = new ArrayList<>();
-//        todoList.add(new Todo(1,"Làm Bài tập",true, LocalDateTime.now(),"normal"));
-//        todoList.add(new Todo(2,"Làm Bài tập 2",false, LocalDateTime.now(),"normal"));
-//        todoList.add(new Todo(3,"Làm Bài tập 3",false, LocalDateTime.now(),"high"));
- //       todoList.add(new Todo(1,"Làm Bài tập",true));
- //       todoList.add(new Todo(2,"Làm Bài tập 2",false));
-  //      todoList.add(new Todo(3,"Làm Bài tập 3",false));
-
     }
     private int generateId(){
         return (int)Math.floor(Math.random()+(1000-100+1)-100);
@@ -54,7 +44,7 @@ public class TodoService {
         return todo;
     }
     public Todo updateId(int id, UpdateTodoRequest updateTodoRequest){
-      Todo todo = todoRepository.findById(id).get();
+      Todo todo = todoRepository.findById(id).orElse(null);
       if (todo != null){
           todo.setTitle(updateTodoRequest.getTitle());
           todo.setStatus(updateTodoRequest.getStatus());
@@ -64,6 +54,12 @@ public class TodoService {
       else throw new NotFoundException("Can not find id "+id);
     }
     public void deleteById(int id){
-        todoRepository.deleteById(id);
+        Todo todel = todoRepository.findById(id).orElse(null);
+        if (todel != null){
+            todoRepository.deleteById(id);
+        }
+        else {
+            throw new NotFoundException("Can not find id "+id);
+        }
     }
 }
