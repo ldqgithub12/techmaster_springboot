@@ -2,6 +2,7 @@ package com.example.demojpa.repository;
 
 import com.example.demojpa.dto.UserDto;
 import com.example.demojpa.entity.User;
+import com.example.demojpa.projections.UserProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,8 +26,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findTop5ByName(String name);
 
     // 2. JPQL Query (JPA Query Language) : Query dựa theo entity
-    @Query("select u from User u where u.name = ?1")
-    List<User> findByNameJPQL(String name);
+//    @Query("select u from User u where u.name = ?1")
+    @Query(value="select * from user u where u.name like '%:name%'", nativeQuery=true)
+    List<User> findByNameJPQL(@Param("name") String name);
 
     @Query("select u from User u where u.email = :email")
     Optional<User> findByEmailJPQL(@Param("email") String email);
@@ -52,4 +54,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<UserDto> getUserDtoUsingNativeQuery();
 
     // 4. Projection (inteface)
+    UserProjection findUserProjectionByEmail(String email);
+    //Sap xep
+
 }

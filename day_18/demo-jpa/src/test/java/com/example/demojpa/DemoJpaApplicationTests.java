@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
@@ -46,6 +49,11 @@ class DemoJpaApplicationTests {
         users.forEach(System.out::println);
     }
 
+    @Test
+    void find_by_name(){
+        List<User> users = userRepository.findByNameJPQL("an");
+        users.forEach(System.out::println);
+    }
     @Test
     void get_by_id() {
         Optional<User> userOptional = userRepository.findById(31);
@@ -97,5 +105,18 @@ class DemoJpaApplicationTests {
     void getUserDtoUsingNativeQuery() {
         List<UserDto> userDtos = userRepository.getUserDtoUsingNativeQuery();
         userDtos.forEach(System.out::println);
+    }
+    @Test
+    void sort_user(){
+        List<User> users = userRepository.findAll(Sort.by("name").ascending());
+        users.forEach(System.out::println);
+    }
+    @Test
+    void pagation_user(){
+        Page<User> page = userRepository.findAll(PageRequest.of(0,10));
+        page.getContent().forEach(System.out::println);
+
+        //Phan trang su dung (Method query, jpdl)
+        //Phan trang
     }
 }
