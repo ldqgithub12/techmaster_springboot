@@ -1,0 +1,34 @@
+package com.example.KiemTraPhanAPI.controllers;
+
+import com.example.KiemTraPhanAPI.models.AdminResponse;
+import com.example.KiemTraPhanAPI.models.Course;
+import com.example.KiemTraPhanAPI.services.AdminServiceImpl;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+@RestController
+@RequestMapping("/api/v1/admin/courses")
+public class AdminController {
+    private final AdminServiceImpl adminService;
+
+    public AdminController(AdminServiceImpl adminService) {
+        this.adminService = adminService;
+    }
+    @GetMapping("/")
+    public AdminResponse getByAdmin(@RequestParam(required = false,defaultValue = "1") int page, @RequestParam(required = false,defaultValue = "10") int pageSize){
+        return adminService.getByAdmin(page,pageSize);
+    }
+    @PostMapping("/")
+    public Course addOrUpdate(@RequestBody @Valid Course course){
+        return adminService.addOrUpdateCourse(course);
+    }
+    @GetMapping("/{id}")
+    public Course findById(@PathVariable int id){
+        return adminService.findById(id);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteCourse(@PathVariable int id){
+        adminService.deleteCourse(id);
+    }
+}

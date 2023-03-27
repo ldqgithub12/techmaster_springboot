@@ -68,17 +68,15 @@ public class UserService {
             throw new BadRequestException("Email = " + request.getEmail() + " is existed");
         }
 
-        Random rd = new Random();
+        //Random rd = new Random();
         User user = new User();
-        user.setId(rd.nextInt(100));
+        //user.setId(rd.nextInt(100));
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhone());
         user.setAddress(request.getAddress());
         user.setPassword(request.getPassword());
-
         userRepository.save(user);
-
         return UserMapper.toUserDto(user);
     }
 //
@@ -91,7 +89,7 @@ public class UserService {
         user.setName(request.getName());
         user.setPhone(request.getPhone());
         user.setAddress(request.getAddress());
-
+        userRepository.save(user);
         return UserMapper.toUserDto(user);
     }
 //
