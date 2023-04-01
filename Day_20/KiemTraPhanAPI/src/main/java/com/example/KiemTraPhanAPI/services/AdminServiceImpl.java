@@ -21,28 +21,28 @@ public class AdminServiceImpl implements IAdminService{
     }
 
     @Override
-    public AdminResponse getByAdmin(int page, int pageSize) {
-        AdminResponse response = new AdminResponse();
+    public List<Course> getByAdmin() {
+//        AdminResponse response = new AdminResponse();
         List<Course> list = courseRepository.findAll();
-        Course[] data = new Course[pageSize];
-        response.setCurPage(page);
-        response.setPageSize(pageSize);
-        if (list.size()<pageSize){
-            response.setTotalPage(1);
-        }
-        else response.setTotalPage((int)Math.floor(list.size()/pageSize));
-        response.setTotalItem(list.size());
-        int i = 0;
-        if (i >= (page - 1) * pageSize && i < page * pageSize) {
-            int j = list.size();
-            while (j > 0){
-                data[i] = list.get(i);
-                i++;
-                j--;
-            }
-        }
-        response.setData(data);
-        return response;
+//        Course[] data = new Course[pageSize];
+//        response.setCurPage(page);
+//        response.setPageSize(pageSize);
+//        if (list.size()<pageSize){
+//            response.setTotalPage(1);
+//        }
+//        else response.setTotalPage((int)Math.floor(list.size()/pageSize));
+//        response.setTotalItem(list.size());
+//        int i = 0;
+//        if (i >= (page - 1) * pageSize && i < page * pageSize) {
+//            int j = list.size();
+//            while (j > 0){
+//                data[i] = list.get(i);
+//                i++;
+//                j--;
+//            }
+//        }
+//        response.setData(data);
+        return  list;
     }
 
     @Override

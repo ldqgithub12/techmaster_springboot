@@ -6,6 +6,7 @@ import com.example.KiemTraPhanAPI.services.AdminServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/admin/courses")
@@ -15,9 +16,13 @@ public class AdminController {
     public AdminController(AdminServiceImpl adminService) {
         this.adminService = adminService;
     }
+//    @GetMapping("/")
+//    public AdminResponse getByAdmin(@RequestParam(required = false,defaultValue = "1") int page, @RequestParam(required = false,defaultValue = "10") int pageSize){
+//        return adminService.getByAdmin(page,pageSize);
+//    }
     @GetMapping("/")
-    public AdminResponse getByAdmin(@RequestParam(required = false,defaultValue = "1") int page, @RequestParam(required = false,defaultValue = "10") int pageSize){
-        return adminService.getByAdmin(page,pageSize);
+    public List<Course> getByAdmin (){
+        return adminService.getByAdmin();
     }
     @PostMapping("/")
     public Course addOrUpdate(@RequestBody @Valid Course course){
