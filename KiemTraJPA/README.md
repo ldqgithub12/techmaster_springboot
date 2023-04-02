@@ -111,7 +111,7 @@ public class EmployeeServices {
     public List<Employee> findAllCustom(String lastName){
         Query namedQuery = getEntityManager().createNamedQuery("Employee.findAllCustom");
         namedQuery.setParameter("lastName", lastName);
-        return (List<Employee>) namedQuery.getSingleResult();
+        return (List<Employee>) namedQuery.getResultList();
     }
 
 }
