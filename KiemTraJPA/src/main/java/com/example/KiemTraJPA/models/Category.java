@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -17,8 +18,17 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
-    private String name;
-    @OneToMany(mappedBy = "category")
-    private List<Product> products;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products = new ArrayList<>();
+
+    //auto update null khi xoa category
+    @PreRemove
+    private void preRemove() {
+        for (Product product : products) {
+            product.setCategory(null);
+        }
+    }
 }

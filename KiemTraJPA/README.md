@@ -99,6 +99,25 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
 ```
 
+```java
+@Service
+public class EmployeeServices {
+    @Autowired
+    EmployeeRepository employeeRepository;
+    EntityManagerFactory emf;
+    private EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
+    public List<Employee> findAllCustom(String lastName){
+        Query namedQuery = getEntityManager().createNamedQuery("Employee.findAllCustom");
+        namedQuery.setParameter("lastName", lastName);
+        return (List<Employee>) namedQuery.getSingleResult();
+    }
+
+}
+
+```
+
 * @Query là câu truy vấn được định nghĩa bằng cách viết trực tiếp câu query trong phần thân của phương thức trong repository
 ```java
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
@@ -130,3 +149,95 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 ```
 
 ### Câu 11
+```java
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name="category")
+public class Category {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products = new ArrayList<>();
+
+    //auto update null khi xoa category
+    @PreRemove
+    private void preRemove() {
+        for (Product product : products) {
+            product.setCategory(null);
+        }
+    }
+}
+```
+
+```java
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name="product")
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @ManyToMany
+    @JoinTable(
+            name = "product_tag",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> tags = new ArrayList<>();
+}
+```
+
+```java
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name="tag")
+public class Tag {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @ManyToMany
+    @JoinTable(
+            name = "product_tag",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> tags = new ArrayList<>();
+}
+```
+
+### Câu 13
+```java
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name="post")
+public class Post {
+    @Id
+    private String id;
+    private String title;
+
+    public static String generateId() {
+        return UUID.randomUUID().toString();
+    }
+}
+```
