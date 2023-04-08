@@ -1,9 +1,10 @@
 package com.example.KiemTraPhanAPI.services;
 
-import com.example.KiemTraPhanAPI.exceptions.CustomExceptionHandler;
 import com.example.KiemTraPhanAPI.exceptions.NotFoundException;
-import com.example.KiemTraPhanAPI.models.AdminResponse;
+import com.example.KiemTraPhanAPI.models.Category;
 import com.example.KiemTraPhanAPI.models.Course;
+import com.example.KiemTraPhanAPI.models.User;
+import com.example.KiemTraPhanAPI.repository.CategoryRepository;
 import com.example.KiemTraPhanAPI.repository.CourseRepository;
 import com.example.KiemTraPhanAPI.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,12 @@ import java.util.List;
 public class AdminServiceImpl implements IAdminService{
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
 
-    public AdminServiceImpl(CourseRepository courseRepository, UserRepository userRepository) {
+    public AdminServiceImpl(CourseRepository courseRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -53,26 +56,31 @@ public class AdminServiceImpl implements IAdminService{
 
     @Override
     public Course addOrUpdateCourse(Course course) {
-        Course courses = courseRepository.findById(course.getId()).orElse(null);
-        if (courses == null){
-            courseRepository.save(course);
-        }
-        else {
-            courses.setName(course.getName());
-            courses.setDescription(course.getDescription());
-            courses.setType(course.getType());
-            courses.setThumbnail(course.getThumbnail());
-            courses.setPrice(course.getPrice());
-            courses.setRating(course.getRating());
-            courses.setCategory(course.getCategory());
-            courses.setUser(course.getUser());
-            courseRepository.save(courses);
-        }
-        return courses;
+        return courseRepository.save(course);
     }
+
+    @Override
+    public Course UpdateCourse(int id, Course updateCourse) {
+        Course course = courseRepository.findById(id).orElseThrow(()->new NotFoundException("Không tìm thấy id "+id));
+        course.setName(updateCourse.getName());
+        course.setDescription(updateCourse.getDescription());
+        course.setType(updateCourse.getType());
+        course.setThumbnail(updateCourse.getThumbnail());
+        course.setPrice(updateCourse.getPrice());
+        course.setRating(updateCourse.getRating());
+        courseRepository.save(course);
+        return course;
+    }
+
     @Override
     public void deleteCourse(int id) {
         Course course = courseRepository.findById(id).orElseThrow(()->new NotFoundException("Không tìm thấy id "+id));
         courseRepository.delete(course);
+    }
+    public List<User> getAllUser(){
+        return userRepository.findAll();
+    }
+    public List<Category> getAllCategory(){
+        return categoryRepository.findAll();
     }
 }

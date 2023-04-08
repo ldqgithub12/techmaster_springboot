@@ -10,5 +10,6 @@ public interface IAdminService {
     public List<Course> getByAdmin();
     public Course findById(int id);
     public Course addOrUpdateCourse(Course course);
+    public Course UpdateCourse(int id, Course updateCourse);
     public void deleteCourse(int id);
 }
