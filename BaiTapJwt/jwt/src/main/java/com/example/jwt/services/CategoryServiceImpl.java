@@ -7,6 +7,7 @@ import com.example.jwt.exceptions.CustomException;
 import com.example.jwt.repository.BlogRepository;
 import com.example.jwt.repository.CategoryRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -31,16 +32,24 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public Page<Blog> getAllBlog(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Blog> result = blogRepository.findAll(pageable);
+        Page<Blog> result = blogRepository.findAllByStatusTrue(pageable);
+//        List<Blog> newContent = result.getContent()
+//                .stream()
+//                .filter(blog -> blog.getStatus() == true)
+//                .collect(Collectors.toList());
+//        return new PageImpl<>(newContent,pageable, newContent.size());
         return result;
     }
 
     @Override
     public List<Blog> findBlog(String name) {
+        List<Blog> result = new ArrayList<>();
         if (name == ""){
-            return null;
+            return result;
         }
-        return blogRepository.findByTitleContains(name);
+        result =  blogRepository.findByTitleContains(name);
+        result = result.stream().filter(blog -> blog.getStatus()==true).collect(Collectors.toList());
+        return result;
     }
 
     @Override
@@ -85,7 +94,8 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public List<Blog> getByCategory(String category) {
-        return blogRepository.findByCategoriesName(category);
+        return blogRepository.findByCategoriesName(category).stream().filter(blog -> blog.getStatus() == true).collect(Collectors.toList());
+
     }
 
     @Override

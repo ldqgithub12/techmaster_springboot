@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +55,31 @@ public class Blog implements Serializable {
     @JsonIgnore
     private User user;
 
+    public String getCreatedAt() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        if (this.createdAt ==null){
+            return null;
+        }
+        return createdAt.format(formatter);
+    }
 
-//    @OneToMany(mappedBy = "blog", fetch = FetchType.LAZY)
+    public String getUpdatedAt() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        if (this.updatedAt == null){
+            return "";
+        }
+        return updatedAt.format(formatter);
+    }
+
+    public String getPulishedAt() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        if (this.pulishedAt == null){
+            return "";
+        }
+        return pulishedAt.format(formatter);
+    }
+
+    //    @OneToMany(mappedBy = "blog", fetch = FetchType.LAZY)
 //    private List<comment> comments;
     @ManyToMany
     @JoinTable(name = "blog_category",
