@@ -36,14 +36,14 @@ public class CategoryController {
     }
 
     @GetMapping("/search")
-    public List<Blog> searchBlog(@RequestParam String name){
+    public List<Blog> searchBlog(@RequestParam(required = false) String name){
         return categoryService.findBlog(name);
     }
     @GetMapping("/categories")
     public List<CategoryDto> getAllCategory(){
         return categoryService.getAllCategory();
     }
-    @GetMapping("/category/{categoryName}")
+    @GetMapping("/categories/{categoryName}")
     public List<Blog> findByCategoryName(@PathVariable String categoryName){
         return categoryService.getByCategory(categoryName);
     }

@@ -37,6 +37,9 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public List<Blog> findBlog(String name) {
+        if (name == ""){
+            return null;
+        }
         return blogRepository.findByTitleContains(name);
     }
 
