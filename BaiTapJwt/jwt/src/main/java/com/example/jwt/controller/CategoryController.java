@@ -1,7 +1,9 @@
 package com.example.jwt.controller;
 
 import com.example.jwt.dto.CategoryDto;
+import com.example.jwt.dto.CommentDto;
 import com.example.jwt.entity.Blog;
+import com.example.jwt.entity.Comment;
 import com.example.jwt.entity.User;
 import com.example.jwt.exceptions.CustomException;
 import com.example.jwt.services.ICategoryService;
@@ -54,5 +56,13 @@ public class CategoryController {
     @GetMapping("/category-top/{top}")
     public List<CategoryDto> categoriesUsedMost(@PathVariable String top){
         return categoryService.categoryUsedMost(top);
+    }
+    @GetMapping("/comment/{id}")
+    public List<CommentDto> getCommentOfBlog(@PathVariable int id){
+        return categoryService.listComment(id);
+    }
+    @GetMapping("comment-user/{id}")
+    public String getCommentUser(@PathVariable int id){
+        return categoryService.getCommentUser(id);
     }
 }

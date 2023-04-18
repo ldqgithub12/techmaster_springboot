@@ -1,13 +1,16 @@
 package com.example.jwt.services;
 
 import com.example.jwt.dto.CategoryDto;
+import com.example.jwt.dto.CommentDto;
 import com.example.jwt.entity.Blog;
 import com.example.jwt.entity.Category;
+import com.example.jwt.entity.Comment;
+import com.example.jwt.entity.User;
 import com.example.jwt.exceptions.CustomException;
 import com.example.jwt.repository.BlogRepository;
 import com.example.jwt.repository.CategoryRepository;
+import com.example.jwt.repository.CommentRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,10 +26,12 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements ICategoryService {
     private final BlogRepository blogRepository;
     private final CategoryRepository categoryRepository;
+    private final CommentRepository commentRepository;
 
-    public CategoryServiceImpl(BlogRepository blogRepository, CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(BlogRepository blogRepository, CategoryRepository categoryRepository, CommentRepository commentRepository) {
         this.blogRepository = blogRepository;
         this.categoryRepository = categoryRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -101,5 +106,23 @@ public class CategoryServiceImpl implements ICategoryService {
     @Override
     public Blog getBlogByIdAndSlug(int id, String slug) {
         return blogRepository.findByIdAndSlug(id,slug);
+    }
+    @Override
+    public List<CommentDto> listComment(int id){
+        List<Comment> comment =commentRepository.findByBlogId(id);
+        List<CommentDto> result = comment.stream().map(comment1 -> {
+            CommentDto commentDto = new CommentDto();
+            commentDto.setComment(comment1.getContent());
+            commentDto.setCreatedAt(comment1.getCreatedAt());
+            commentDto.setUpdateAt(comment1.getUpdatedAt());
+            commentDto.setUsername(comment1.getUser().getName());
+            return commentDto;
+        }).collect(Collectors.toList());
+        return result;
+    }
+
+    @Override
+    public String getCommentUser(int id) {
+        return commentRepository.findUserByCommentId(id);
     }
 }
