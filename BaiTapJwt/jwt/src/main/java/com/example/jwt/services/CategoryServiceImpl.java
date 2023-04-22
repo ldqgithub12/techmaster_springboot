@@ -38,11 +38,6 @@ public class CategoryServiceImpl implements ICategoryService {
     public Page<Blog> getAllBlog(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Blog> result = blogRepository.findAllByStatusTrue(pageable);
-//        List<Blog> newContent = result.getContent()
-//                .stream()
-//                .filter(blog -> blog.getStatus() == true)
-//                .collect(Collectors.toList());
-//        return new PageImpl<>(newContent,pageable, newContent.size());
         return result;
     }
 
