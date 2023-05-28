@@ -52,7 +52,7 @@ public class Blog implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @JsonIgnore
+    //@JsonIgnore
     private User user;
 
     public String getCreatedAt() {
